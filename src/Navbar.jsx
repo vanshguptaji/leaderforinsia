@@ -1,5 +1,5 @@
 import { useState, useEffect } from 'react';
-import { Plus, X } from 'lucide-react';
+import { Link, Plus, X } from 'lucide-react';
 
 export default function Navbar({ currentRoute, setRoute }) {
     const [isAboutMenuOpen, setIsAboutMenuOpen] = useState(false);
@@ -111,7 +111,7 @@ export default function Navbar({ currentRoute, setRoute }) {
                             >
                                 Portfolio
                             </button>
-                            <a href="#" className="text-gray-700 hover:text-gray-900">Team</a>
+                            <a href="#" className="text-gray-700 hover:text-gray-900"></a>
                             <a href="#" className="text-gray-700 hover:text-gray-900">Companies</a>
                             <div className="relative">
                                 <button
@@ -169,7 +169,9 @@ export default function Navbar({ currentRoute, setRoute }) {
                                 >
                                     PortfoLIO
                                 </button>
-                                <a href="#" className="text-gray-700 hover:text-gray-900">Team</a>
+                                <Link>
+                                <a href="#" className="text-gray-700 hover:text-gray-900"></a>
+                                </Link>
                                 <a href="#" className="text-gray-700 hover:text-gray-900">Companies</a>
                                 <div>
                                     <button
