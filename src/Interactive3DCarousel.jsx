@@ -2,11 +2,10 @@ import React, { useState, useEffect } from 'react';
 
 const Interactive3DCarousel = () => {
   const [currentSlide, setCurrentSlide] = useState(0);
-  const [prevSlide, setPrevSlide] = useState(null);
   const [isAutoPlaying, setIsAutoPlaying] = useState(true);
   const [slideDirection, setSlideDirection] = useState('right');
   const [isAnimating, setIsAnimating] = useState(false);
-  const ANIMATION_DURATION = 800; // ms, keep in sync with CSS durations
+  const ANIMATION_DURATION = 600; // ms, reduced for smoother transitions
 
   const slides = [
     {
@@ -41,39 +40,31 @@ const Interactive3DCarousel = () => {
 
   // Auto-play functionality
   useEffect(() => {
-    if (!isAutoPlaying) return;
+    if (!isAutoPlaying || isAnimating) return;
     
     const interval = setInterval(() => {
-  changeSlide((currentSlide + 1) % slides.length, 'right');
+      handleNextSlide();
     }, 4000);
 
     return () => clearInterval(interval);
-  }, [isAutoPlaying, slides.length]);
+  }, [isAutoPlaying, isAnimating, currentSlide]);
 
   const handlePrevSlide = () => {
+    if (isAnimating) return;
     setIsAutoPlaying(false);
-    const next = (currentSlide - 1 + slides.length) % slides.length;
-    changeSlide(next, 'left');
+    setSlideDirection('left');
+    setIsAnimating(true);
+    setCurrentSlide((prev) => (prev - 1 + slides.length) % slides.length);
+    setTimeout(() => setIsAnimating(false), ANIMATION_DURATION);
   };
 
   const handleNextSlide = () => {
+    if (isAnimating) return;
     setIsAutoPlaying(false);
-    const next = (currentSlide + 1) % slides.length;
-    changeSlide(next, 'right');
-  };
-
-  // small helper to transition between slides while keeping previous visible for exit animation
-  const changeSlide = (nextIndex, direction) => {
-    if (isAnimating) return; // ignore while animating
-    setPrevSlide(currentSlide);
-    setSlideDirection(direction);
-    setCurrentSlide(nextIndex);
+    setSlideDirection('right');
     setIsAnimating(true);
-    // clear prev after animation completes
-    setTimeout(() => {
-      setPrevSlide(null);
-      setIsAnimating(false);
-    }, ANIMATION_DURATION + 50);
+    setCurrentSlide((prev) => (prev + 1) % slides.length);
+    setTimeout(() => setIsAnimating(false), ANIMATION_DURATION);
   };
 
   const getPrevSlideIndex = () => (currentSlide - 1 + slides.length) % slides.length;
@@ -85,40 +76,40 @@ const Interactive3DCarousel = () => {
         {/* Main Content Area */}
         <div className="relative h-screen flex items-center">
           {/* Previous Slide Preview - Left Side */}
-          <div className="absolute left-0 top-1/2 transform -translate-y-1/2 z-10 opacity-20 transition-all duration-700 hover:opacity-50">
-            <div className="w-48 md:w-64 lg:w-80 h-32 md:h-40 lg:h-48 rounded-r-2xl overflow-hidden shadow-2xl cursor-pointer" onClick={handlePrevSlide}>
+          <div className="absolute left-0 top-1/2 transform -translate-y-1/2 z-10 opacity-30 transition-all duration-500 hover:opacity-60">
+            <div className="w-48 md:w-64 lg:w-80 h-32 md:h-40 lg:h-48 rounded-r-2xl overflow-hidden shadow-xl cursor-pointer transform transition-transform duration-300 hover:scale-105" onClick={handlePrevSlide}>
               <img 
                 src={slides[getPrevSlideIndex()].image} 
                 alt={slides[getPrevSlideIndex()].title}
-                className="w-full h-full object-cover transition-transform duration-500 hover:scale-105"
+                className="w-full h-full object-cover"
                 onError={(e) => {
                   e.target.src = '/logo.png';
                 }}
               />
-              <div className="absolute inset-0 bg-slate-900/30 flex items-center justify-center">
-                <div className="text-white/90 text-center px-4">
-                  <div className="text-xs md:text-sm text-emerald-400 mb-1">{slides[getPrevSlideIndex()].subtitle}</div>
-                  <h3 className="text-sm md:text-base lg:text-lg font-light leading-tight">{slides[getPrevSlideIndex()].title}</h3>
+              <div className="absolute inset-0 bg-slate-900/40 flex items-center justify-center backdrop-blur-sm">
+                <div className="text-white text-center px-4">
+                  <div className="text-xs md:text-sm text-emerald-400 mb-1 opacity-90">{slides[getPrevSlideIndex()].subtitle}</div>
+                  <h3 className="text-sm md:text-base lg:text-lg font-light leading-tight opacity-95">{slides[getPrevSlideIndex()].title}</h3>
                 </div>
               </div>
             </div>
           </div>
 
           {/* Next Slide Preview - Right Side */}
-          <div className="absolute right-0 top-1/2 transform -translate-y-1/2 opacity-20 transition-all duration-700 hover:opacity-50">
-            <div className="w-48 md:w-64 lg:w-80 h-32 md:h-40 lg:h-48 rounded-l-2xl overflow-hidden shadow-2xl cursor-pointer" onClick={handleNextSlide}>
+          <div className="absolute right-0 top-1/2 transform -translate-y-1/2 z-10 opacity-30 transition-all duration-500 hover:opacity-60">
+            <div className="w-48 md:w-64 lg:w-80 h-32 md:h-40 lg:h-48 rounded-l-2xl overflow-hidden shadow-xl cursor-pointer transform transition-transform duration-300 hover:scale-105" onClick={handleNextSlide}>
               <img 
                 src={slides[getNextSlideIndex()].image} 
                 alt={slides[getNextSlideIndex()].title}
-                className="w-full h-full object-cover transition-transform duration-500 hover:scale-105"
+                className="w-full h-full object-cover"
                 onError={(e) => {
                   e.target.src = '/logo.png';
                 }}
               />
-              <div className="absolute inset-0 bg-slate-900/30 flex items-center justify-center">
-                <div className="text-white/90 text-center px-4">
-                  <div className="text-xs md:text-sm text-emerald-400 mb-1">{slides[getNextSlideIndex()].subtitle}</div>
-                  <h3 className="text-sm md:text-base lg:text-lg font-light leading-tight">{slides[getNextSlideIndex()].title}</h3>
+              <div className="absolute inset-0 bg-slate-900/40 flex items-center justify-center backdrop-blur-sm">
+                <div className="text-white text-center px-4">
+                  <div className="text-xs md:text-sm text-emerald-400 mb-1 opacity-90">{slides[getNextSlideIndex()].subtitle}</div>
+                  <h3 className="text-sm md:text-base lg:text-lg font-light leading-tight opacity-95">{slides[getNextSlideIndex()].title}</h3>
                 </div>
               </div>
             </div>
@@ -128,93 +119,55 @@ const Interactive3DCarousel = () => {
           <div className="w-full flex items-center justify-center px-4 md:px-8 lg:px-16">
             <div className="max-w-7xl mx-auto w-full">
               <div className="grid grid-cols-1 lg:grid-cols-2 gap-8 lg:gap-20 items-center min-h-[70vh]">
-                {/* Left Side - Text Content (layered to animate outgoing and incoming) */}
+                {/* Left Side - Text Content */}
                 <div className="relative w-full max-w-2xl order-2 lg:order-1 text-center lg:text-left">
-                  {/* Incoming/current text */}
                   <div
-                    key={`text-current-${currentSlide}`}
-                    className={`text-white max-w-2xl mx-auto lg:mx-0 transition-all duration-700 ${
-                      slideDirection === 'right'
-                        ? 'animate-[slideInFromRight_0.7s_ease-out_forwards]'
-                        : 'animate-[slideInFromLeft_0.7s_ease-out_forwards]'
+                    key={currentSlide}
+                    className={`text-white max-w-2xl mx-auto lg:mx-0 transition-all duration-600 ease-out ${
+                      isAnimating 
+                        ? slideDirection === 'right' 
+                          ? 'animate-slideInLeft' 
+                          : 'animate-slideInRight'
+                        : 'opacity-100 transform translate-x-0'
                     }`}
-                    style={{ position: prevSlide !== null ? 'absolute' : 'relative', inset: 0 }}
                   >
-                    <div className={`text-base text-emerald-400 mb-5 font-normal tracking-wide opacity-0 ${
-                      slideDirection === 'right'
-                        ? 'animate-[slideInFromRight_0.8s_ease-out_0.1s_forwards]'
-                        : 'animate-[slideInFromLeft_0.8s_ease-out_0.1s_forwards]'
-                    }`}>
+                    <div className="text-base text-emerald-400 mb-5 font-normal tracking-wide">
                       {slides[currentSlide].subtitle}
                     </div>
-                    <h1 className={`text-4xl md:text-5xl lg:text-6xl font-light text-white leading-tight mb-8 opacity-0 ${
-                      slideDirection === 'right'
-                        ? 'animate-[slideInFromRight_0.8s_ease-out_0.2s_forwards]'
-                        : 'animate-[slideInFromLeft_0.8s_ease-out_0.2s_forwards]'
-                    }`}>
+                    <h1 className="text-4xl md:text-5xl lg:text-6xl font-light text-white leading-tight mb-8">
                       {slides[currentSlide].title}
                     </h1>
-                    <p className={`text-lg md:text-xl text-white/80 leading-relaxed font-light max-w-lg opacity-0 mx-auto lg:mx-0 ${
-                      slideDirection === 'right'
-                        ? 'animate-[slideInFromRight_0.8s_ease-out_0.3s_forwards]'
-                        : 'animate-[slideInFromLeft_0.8s_ease-out_0.3s_forwards]'
-                    }`}>
+                    <p className="text-lg md:text-xl text-white/80 leading-relaxed font-light max-w-lg mx-auto lg:mx-0">
                       {slides[currentSlide].description}
                     </p>
                   </div>
-
-                  {/* Outgoing/previous text (if any) */}
-                  {prevSlide !== null && (
-                    <div
-                      key={`text-prev-${prevSlide}`}
-                      className={`text-white max-w-2xl mx-auto lg:mx-0 transition-all duration-700 ${
-                        slideDirection === 'right'
-                          ? 'animate-[slideOutToLeft_0.7s_ease-in_forwards]'
-                          : 'animate-[slideOutToRight_0.7s_ease-in_forwards]'
-                      } opacity-100`}
-                      style={{ position: 'absolute', inset: 0 }}
-                    >
-                      <div className="text-base text-emerald-400 mb-5 font-normal tracking-wide">
-                        {slides[prevSlide].subtitle}
-                      </div>
-                      <h1 className="text-4xl md:text-5xl lg:text-6xl font-light text-white leading-tight mb-8">
-                        {slides[prevSlide].title}
-                      </h1>
-                      <p className="text-lg md:text-xl text-white/80 leading-relaxed font-light max-w-lg mx-auto lg:mx-0">
-                        {slides[prevSlide].description}
-                      </p>
-                    </div>
-                  )}
                 </div>
 
-                {/* Right Side - Main Image (layered) */}
+                {/* Right Side - Main Image */}
                 <div className="relative flex justify-center items-center order-1 lg:order-2 w-full">
-                  {/* Incoming/current image */}
                   <div
-                    key={`image-current-${currentSlide}`}
-                    className={`w-full max-w-2xl h-64 md:h-80 lg:h-96 rounded-3xl overflow-hidden relative shadow-2xl opacity-100 bg-gradient-to-br from-slate-700 to-slate-800 z-20 transition-all duration-700 ${
-                      slideDirection === 'right'
-                        ? 'animate-[slideInFromRight_0.8s_ease-out_0.1s_forwards]'
-                        : 'animate-[slideInFromLeft_0.8s_ease-out_0.1s_forwards]'
+                    key={currentSlide}
+                    className={`w-full max-w-2xl h-64 md:h-80 lg:h-96 rounded-3xl overflow-hidden relative shadow-2xl bg-gradient-to-br from-slate-700 to-slate-800 transition-all duration-600 ease-out transform ${
+                      isAnimating 
+                        ? slideDirection === 'right' 
+                          ? 'animate-slideInRight scale-95 opacity-0' 
+                          : 'animate-slideInLeft scale-95 opacity-0'
+                        : 'scale-100 opacity-100'
                     }`}
-                    style={{ position: prevSlide !== null ? 'absolute' : 'relative', inset: 0 }}
                   >
                     <img 
                       src={slides[currentSlide].image} 
                       alt={slides[currentSlide].title}
-                      className="w-full h-full object-cover transition-transform duration-700 hover:scale-105 relative z-30"
-                      style={{ display: 'block' }}
+                      className="w-full h-full object-cover transition-transform duration-500 hover:scale-105"
                       onLoad={(e) => {
-                        console.log('Image loaded successfully:', e.target.src);
                         e.target.style.opacity = '1';
                       }}
                       onError={(e) => {
-                        console.log('Image failed to load:', e.target.src);
                         e.target.style.display = 'none';
                         const parent = e.target.parentElement;
                         if (!parent.querySelector('.fallback-content')) {
                           const fallback = document.createElement('div');
-                          fallback.className = 'fallback-content absolute inset-0 flex items-center justify-center text-white/80 text-center p-8 z-30';
+                          fallback.className = 'fallback-content absolute inset-0 flex items-center justify-center text-white/80 text-center p-8';
                           fallback.innerHTML = `
                             <div>
                               <div class="text-4xl mb-4">📸</div>
@@ -225,30 +178,8 @@ const Interactive3DCarousel = () => {
                         }
                       }}
                     />
-                    <div className="absolute inset-0 bg-gradient-to-t from-slate-900/10 to-transparent z-25"></div>
+                    <div className="absolute inset-0 bg-gradient-to-t from-slate-900/10 to-transparent"></div>
                   </div>
-
-                  {/* Outgoing/previous image */}
-                  {prevSlide !== null && (
-                    <div
-                      key={`image-prev-${prevSlide}`}
-                      className={`w-full max-w-2xl h-64 md:h-80 lg:h-96 rounded-3xl overflow-hidden relative shadow-2xl bg-gradient-to-br from-slate-700 to-slate-800 z-10 transition-all duration-700 ${
-                        slideDirection === 'right'
-                          ? 'animate-[slideOutToLeft_0.8s_ease-in_forwards]'
-                          : 'animate-[slideOutToRight_0.8s_ease-in_forwards]'
-                      }`}
-                      style={{ position: 'absolute', inset: 0 }}
-                    >
-                      <img 
-                        src={slides[prevSlide].image} 
-                        alt={slides[prevSlide].title}
-                        className="w-full h-full object-cover transition-transform duration-700 relative z-20"
-                        style={{ display: 'block' }}
-                        onError={(e) => { e.target.style.display = 'none'; }}
-                      />
-                      <div className="absolute inset-0 bg-gradient-to-t from-slate-900/10 to-transparent z-25"></div>
-                    </div>
-                  )}
                 </div>
               </div>
             </div>
