@@ -13,32 +13,25 @@ import Landing from './Landing'
 import Interactive3DCarousel from './Interactive3DCarousel'
 import AtlasSection from './AtlasSection'
 
-const ParallaxContainer = () => {
+const InteractiveParallax = () => {
   useEffect(() => {
     const handleScroll = () => {
       const scrollY = window.pageYOffset;
-      const parallaxContainer = document.querySelector('.parallax-container');
-      const interactiveFixed = document.querySelector('.interactive-fixed');
+      const interactiveParallax = document.querySelector('.interactive-parallax');
       
-      if (!parallaxContainer || !interactiveFixed) return;
+      if (!interactiveParallax) return;
 
-      const containerRect = parallaxContainer.getBoundingClientRect();
-      const containerTop = containerRect.top + scrollY;
-      const viewportHeight = window.innerHeight;
+      const rect = interactiveParallax.getBoundingClientRect();
+      const scrollTop = window.pageYOffset;
+      const elementTop = rect.top + scrollTop;
+      const elementHeight = rect.height;
+      const windowHeight = window.innerHeight;
 
-      // Show/hide interactive based on scroll position
-      if (scrollY >= containerTop && scrollY < containerTop + viewportHeight) {
-        // Interactive is visible during the first viewport height
-        interactiveFixed.style.opacity = '1';
-        interactiveFixed.style.zIndex = '1';
-      } else if (scrollY >= containerTop + viewportHeight) {
-        // After first viewport, fade out interactive
-        interactiveFixed.style.opacity = '0';
-        interactiveFixed.style.zIndex = '0';
-      } else {
-        // Before container, hide interactive
-        interactiveFixed.style.opacity = '0';
-        interactiveFixed.style.zIndex = '0';
+      // Calculate if element is in viewport
+      if (scrollTop + windowHeight > elementTop && scrollTop < elementTop + elementHeight) {
+        // Apply parallax transform - slower movement creates overlap effect
+        const rate = (scrollTop - elementTop) * 0.3; // Reduced rate for more overlap
+        interactiveParallax.style.transform = `translateY(${rate}px)`;
       }
     };
 
@@ -49,51 +42,32 @@ const ParallaxContainer = () => {
   }, []);
 
   return (
-    <>
-      {/* Interactive component - fixed in background */}
-      <div className="interactive-fixed" style={{
-        position: 'fixed',
-        top: 0,
-        left: 0,
-        width: '100%',
-        height: '100vh',
-        zIndex: 1,
-        opacity: 0,
-        transition: 'opacity 0.3s ease-out'
+    <div className="interactive-parallax-container" style={{
+      overflow: 'hidden',
+      position: 'relative',
+      height: '120vh' // Reduced height to allow more overlap
+    }}>
+      <div className="interactive-parallax" style={{
+        transition: 'transform 0.1s ease-out',
+        height: '100vh' // Taller than container to create overlap effect
       }}>
         <Interactive3DCarousel />
       </div>
-      
-      {/* Parallax container for scrolling */}
-      <div className="parallax-container" style={{
-        position: 'relative',
-        height: '120vh', // Space for interactive to show
-      }}>
-        {/* Empty space for interactive to show */}
-      </div>
-      
-      {/* Atlas section scrolls normally after interactive */}
-      <div style={{
-        position: 'relative',
-        zIndex: 2,
-        backgroundColor: 'white'
-      }}>
-        <AtlasSection />
-      </div>
-    </>
+    </div>
   );
 };
 
 const HomeContent = () => (
   <>
     <Landing />
-    <ParallaxContainer />
-    <div className="content-after-parallax" style={{ 
+    <InteractiveParallax />
+    <div className="content-after-interactive" style={{ 
       position: 'relative', 
       zIndex: 3, 
       backgroundColor: 'white',
-      marginTop: 0
+      marginTop: '-20vh' // Negative margin to pull content up over the interactive component
     }}>
+      <AtlasSection />
       <Homepage />
       <PortfolioSection />
       <FounderTestimonials />
