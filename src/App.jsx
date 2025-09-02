@@ -13,6 +13,7 @@ import Landing from './Landing'
 import Interactive3DCarousel from './Interactive3DCarousel'
 import AtlasSection from './AtlasSection'
 import FelicisLayout from './felicisLayout'
+import InvestorTeam from './InvestorTeam'
 
 const ParallaxStackProvider = ({ children }) => {
   const [scrollProgress, setScrollProgress] = useState(0);
@@ -236,6 +237,8 @@ const App = () => {
     switch (currentRoute) {
       case 'portfolio':
         return <PortfolioContent />
+      case 'investor':
+        return <InvestorTeam />
       default:
         return <HomeContent />
     }
