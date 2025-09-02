@@ -111,7 +111,7 @@ export default function Navbar({ currentRoute, setRoute }) {
                             >
                                 Portfolio
                             </button>
-                            <a href="#" className="text-gray-700 hover:text-gray-900"></a>
+                            <a href="#" className="text-gray-700 hover:text-gray-900">Investor</a>
                             <a href="#" className="text-gray-700 hover:text-gray-900">Companies</a>
                             <div className="relative">
                                 <button
@@ -170,7 +170,7 @@ export default function Navbar({ currentRoute, setRoute }) {
                                     PortfoLIO
                                 </button>
                                 <Link>
-                                <a href="#" className="text-gray-700 hover:text-gray-900"></a>
+                                <a href="#" className="text-gray-700 hover:text-gray-900">Investor</a>
                                 </Link>
                                 <a href="#" className="text-gray-700 hover:text-gray-900">Companies</a>
                                 <div>

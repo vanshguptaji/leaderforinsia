@@ -208,49 +208,12 @@ const HomeContent = () => {
 };
 
 const PortfolioContent = () => {
-  const portfolioSections = [
-    {
-      component: <StartupGrid />,
-      gradient: "from-indigo-600 via-blue-500 to-purple-600",
-      floatingElements: [
-        { emoji: "🏢", position: "top-20 left-15", size: "text-3xl" },
-        { emoji: "💼", position: "bottom-30 right-20", size: "text-2xl" }
-      ]
-    },
-    {
-      component: <PortfolioInsights />,
-      gradient: "from-purple-600 via-pink-500 to-red-500",
-      floatingElements: [
-        { emoji: "📊", position: "top-35 right-25", size: "text-2xl" },
-        { emoji: "📈", position: "bottom-25 left-30", size: "text-xl" }
-      ]
-    },
-    {
-      component: <Footer />,
-      gradient: "from-gray-800 via-gray-700 to-gray-900",
-      floatingElements: [
-        { emoji: "🌙", position: "top-30 right-20", size: "text-2xl" },
-        { emoji: "⚡", position: "bottom-40 left-35", size: "text-xl" }
-      ]
-    }
-  ];
-
   return (
-    <ParallaxStackProvider>
-      {portfolioSections.map((section, index) => (
-        <ParallaxSection
-          key={index}
-          index={index}
-          gradient={section.gradient}
-          floatingElements={section.floatingElements}
-        >
-          {section.component}
-        </ParallaxSection>
-      ))}
-      
-      {/* Bottom spacing for final scroll */}
-      <div className="h-screen bg-gradient-to-t from-gray-800 to-gray-900" style={{ zIndex: portfolioSections.length + 1 }}></div>
-    </ParallaxStackProvider>
+    <div className="bg-white">
+      <StartupGrid />
+      <PortfolioInsights />
+      <Footer />
+    </div>
   );
 };
 
