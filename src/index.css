@@ -117,5 +117,48 @@
   body {
     @apply bg-background text-foreground;
   }
+  
+  /* Smooth scrolling for the entire page */
+  html {
+    scroll-behavior: smooth;
+  }
+  
+  /* Performance optimization for fixed interactive */
+  .interactive-fixed {
+    will-change: opacity, z-index;
+    transform-style: preserve-3d;
+    backface-visibility: hidden;
+    -webkit-backface-visibility: hidden;
+    contain: layout style paint;
+  }
+  
+  /* Parallax container styles */
+  .parallax-container {
+    will-change: transform;
+    contain: layout style;
+  }
+  
+  /* Content after parallax should scroll normally */
+  .content-after-parallax {
+    position: relative;
+    z-index: 10;
+    background-color: white;
+    min-height: 100vh;
+    margin-top: 0;
+    padding-top: 0;
+  }
+  
+  /* Ensure no gaps or overlaps */
+  .content-after-parallax > * {
+    position: relative;
+    z-index: 1;
+  }
+  
+  /* Ensure AtlasSection has proper background */
+  .atlas-section-wrapper {
+    background-color: white;
+    position: relative;
+    z-index: 5;
+  }
 }
 
