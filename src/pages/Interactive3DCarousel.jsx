@@ -336,12 +336,13 @@ const Interactive3DCarousel = () => {
 
       {/* Enhanced Navigation Controls */}
       <div className="absolute bottom-12 left-1/2 transform -translate-x-1/2 z-20">
-        <div className="flex items-center gap-10">
-          {/* Previous Button */}
+        <div className="flex items-center justify-center space-x-6">
+          {/* Previous Button (left of progress bar) */}
           <button
             className="group bg-white/5 hover:bg-white/15 border border-white/20 hover:border-white/40 rounded-full w-16 h-16 flex items-center justify-center backdrop-blur-xl transition-all duration-500 hover:scale-110 active:scale-95 disabled:opacity-30 disabled:cursor-not-allowed"
             onClick={handlePrevSlide}
             disabled={isAnimating}
+            aria-label="Previous slide"
           >
             <svg
               width="24"
@@ -360,8 +361,8 @@ const Interactive3DCarousel = () => {
             </svg>
           </button>
 
-          {/* Minimalist Progress Bar */}
-          <div className="absolute bottom-6 left-1/2 transform -translate-x-1/2 w-96 h-0.5 bg-white/10 rounded-full overflow-hidden z-20">
+          {/* Minimalist Progress Bar (center) */}
+          <div className="w-96 h-0.5 bg-white/10 rounded-full overflow-hidden">
             <div
               className="h-full bg-gradient-to-r from-cyan-400 to-blue-500 rounded-full transition-all duration-700 ease-out"
               style={{
@@ -370,11 +371,12 @@ const Interactive3DCarousel = () => {
             />
           </div>
 
-          {/* Next Button */}
+          {/* Next Button (right of progress bar) */}
           <button
             className="group bg-white/5 hover:bg-white/15 border border-white/20 hover:border-white/40 rounded-full w-16 h-16 flex items-center justify-center backdrop-blur-xl transition-all duration-500 hover:scale-110 active:scale-95 disabled:opacity-30 disabled:cursor-not-allowed"
             onClick={handleNextSlide}
             disabled={isAnimating}
+            aria-label="Next slide"
           >
             <svg
               width="24"
