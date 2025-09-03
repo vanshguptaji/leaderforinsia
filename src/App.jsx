@@ -55,8 +55,8 @@ const ParallaxStackProvider = ({ children }) => {
         ></div>
       </div>
 
-      {/* Custom CSS for animations and parallax effect */}
-      <style jsx>{`
+  {/* Custom CSS for animations and parallax effect */}
+  <style>{`
         @keyframes float {
           0%, 100% { 
             transform: translateY(0px) rotate(0deg); 

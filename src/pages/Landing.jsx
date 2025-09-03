@@ -48,7 +48,7 @@ export default function Landing() {
     const duplicatedCompanies = [...companies, ...companies];
 
     return (
-        <div className="min-h-screen bg-gradient-to-br from-gray-50 to-white mt-14 w-full">
+        <div className="min-h-screen bg-gradient-to-br from-gray-50 to-white mt-10 w-full">
             <div className="max-w-[1400px] mx-auto px-4 py-16">
                 <div className="text-center mb-16 flex flex-col items-center">
                     <h1 className="text-4xl md:text-6xl font-semibold text-gray-900 mb-6 leading-tight">
@@ -138,7 +138,7 @@ export default function Landing() {
                         </div>
                     </div>
 
-                    <style jsx>{`
+                    <style>{`
                         @keyframes scroll {
                             0% {
                                 transform: translateX(0);
