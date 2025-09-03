@@ -74,14 +74,19 @@ const ParallaxStackProvider = ({ children }) => {
           animation-delay: -3s;
         }
         
+        /* Default: allow parallax sections to size naturally. Only make sticky when .sticky is present. */
         .parallax-section {
           min-height: 100vh;
-          position: sticky;
-          top: 0;
           display: flex;
           align-items: center;
           justify-content: center;
           overflow: hidden;
+        }
+
+        /* Use .sticky to lock a section to the viewport (previous behavior) */
+        .parallax-section.sticky {
+          position: sticky;
+          top: 0;
         }
 
         .parallax-content {
@@ -97,7 +102,7 @@ const ParallaxStackProvider = ({ children }) => {
   );
 };
 
-const ParallaxSection = ({ children, index, gradient = "from-gray-900 to-gray-800", floatingElements = [] }) => {
+const ParallaxSection = ({ children, index, gradient = "from-gray-900 to-gray-800", floatingElements = [], sticky = true }) => {
   const FloatingElement = ({ emoji, position, size }) => (
     <div 
       className={`floating-element absolute ${position} ${size} opacity-10 animate-pulse`}
@@ -109,7 +114,7 @@ const ParallaxSection = ({ children, index, gradient = "from-gray-900 to-gray-80
 
   return (
     <div
-      className="parallax-section"
+      className={`parallax-section ${sticky ? 'sticky' : ''}`}
       style={{ 
         zIndex: index + 1,
       }}
@@ -152,7 +157,8 @@ const HomeContent = () => {
   const parallaxSections = [
     {
       component: <Landing />,
-      gradient: "from-indigo-600 via-purple-600 to-pink-600",
+  gradient: "from-indigo-600 via-purple-600 to-pink-600",
+  sticky: false,
       floatingElements: [
         { emoji: "🚀", position: "top-20 left-10", size: "text-3xl" },
         { emoji: "✨", position: "top-60 right-15", size: "text-2xl" }
@@ -186,6 +192,7 @@ const HomeContent = () => {
             index={index}
             gradient={section.gradient}
             floatingElements={section.floatingElements}
+            sticky={section.sticky !== undefined ? section.sticky : true}
           >
             {section.component}
           </ParallaxSection>
