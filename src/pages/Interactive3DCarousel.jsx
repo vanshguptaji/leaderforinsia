@@ -215,16 +215,8 @@ const Interactive3DCarousel = () => {
 
   const SlideContent = ({ slide, isPreview = false }) => (
     <div
-      className={`relative w-full h-full rounded-3xl overflow-hidden ${
-        isPreview
-          ? "bg-slate-800/40 backdrop-blur-md border border-white/10"
-          : "bg-slate-900/95 backdrop-blur-xl border border-white/20"
-      }`}
-      style={{
-        boxShadow: isPreview
-          ? "0 20px 50px rgba(0, 0, 0, 0.4)"
-          : "0 30px 80px rgba(0, 0, 0, 0.6), 0 0 120px rgba(59, 130, 246, 0.03)",
-      }}
+      className="relative w-full h-full rounded-3xl overflow-hidden bg-transparent"
+      style={{ boxShadow: "none" }}
     >
       {/* Main slide content */}
       {!isPreview ? (
@@ -278,8 +270,7 @@ const Interactive3DCarousel = () => {
         </div>
       )}
 
-      {/* Inner glow border */}
-      <div className="absolute inset-0 rounded-3xl border border-white/10 pointer-events-none"></div>
+  {/* inner border intentionally removed to make slide background transparent */}
     </div>
   );
 
@@ -292,13 +283,6 @@ const Interactive3DCarousel = () => {
           <div className="absolute top-1/3 left-1/4 w-[500px] h-[500px] bg-blue-600/10 rounded-full blur-[100px]"></div>
           <div className="absolute bottom-1/3 right-1/4 w-[500px] h-[500px] bg-cyan-500/10 rounded-full blur-[100px]"></div>
           <div className="absolute top-1/2 left-1/2 w-[300px] h-[300px] bg-slate-700/20 rounded-full blur-[80px] transform -translate-x-1/2 -translate-y-1/2"></div>
-        </div>
-      </div>
-
-      {/* Atlas Venture branding */}
-      <div className="absolute top-8 left-8 z-20">
-        <div className="text-cyan-400 text-lg font-medium tracking-wide">
-          novel medicines.
         </div>
       </div>
 
@@ -315,7 +299,6 @@ const Interactive3DCarousel = () => {
               const isCurrentSlide = index === currentSlide;
               const isNextSlide = index === getNextSlideIndex();
 
-              // Render current slide and the next slide during animation
               const shouldRender = isCurrentSlide || isNextSlide;
 
               if (!shouldRender) return null;
